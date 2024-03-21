@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <title>Async Application</title>
+</head>
+<body>
+
+<script type="text/javascript">
+
+class AsyncCalculator {
+    async square(number) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(number * number);
+            }, 1000);
+        });
+    }
+
+    async sin(theta) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(Math.sin(theta));
+            }, 1000);
+        });
+    }
+
+    async cosine(theta) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(Math.cos(theta));
+            }, 1000);
+        });
+    }
+
+    async arctan(value) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(Math.atan(value));
+            }, 1000);
+        });
+    }
+
+    async calculateR(P, Q, theta) {
+        const A1 = await this.square(P);
+        const A2 = await this.square(Q);
+        const A3 = await this.multiply(2, P * Q);
+        const A4 = await this.cosine(theta);
+        const insideSqrt = await this.add(A1, this.add(A2, this.multiply(A3, A4)));
+        const R = await this.squareRoot(insideSqrt);
+        return R;
+    }
+
+    async calculateAlpha(Q, P, theta) {
+        const A5 = await this.multiply(Q, await this.sin(theta));
+        const A6 = await this.add(P, await this.multiply(Q, await this.cosine(theta)));
+        const alpha = await this.arctan(A5 / A6);
+        return alpha;
+    }
+
+    async multiply(a, b) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(a * b);
+            }, 1000);
+        });
+    }
+
+    async add(a, b) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(a + b);
+            }, 1000);
+        });
+    }
+
+    async squareRoot(number) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(Math.sqrt(number));
+            }, 1000);
+        });
+    }
+}
+
+$(document).ready(function() {
+    const asyncCalculator = new AsyncCalculator();
+
+    const P = parseFloat(prompt("Enter value of P"));
+    const Q = parseFloat(prompt("Enter value of Q"));
+    const theta = parseFloat(prompt("Enter value of theta in radians"));
+
+    asyncCalculator.calculateR(P, Q, theta).then(resultR => {
+        $("#resultR").text(`R = ${resultR.toFixed(2)}`);
+    });
+
+    asyncCalculator.calculateAlpha(Q, P, theta).then(resultAlpha => {
+        $("#resultAlpha").text(`α = ${resultAlpha.toFixed(2)}`);
+    });
+});
+
+</script>
+
+<div id="resultR">Calculating R...</div>
+<div id="resultAlpha">Calculating α...</div>
+
+</body>
+</html>

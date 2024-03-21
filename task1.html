@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <title></title>
+</head>
+<body>
+
+<script type="text/javascript">
+    
+async function gatherInput(promptText) {
+    return new Promise(resolve => {
+        const userInput = prompt(promptText);
+        resolve(parseFloat(userInput));
+    });
+}
+
+async function square(number) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(number * number);
+        }, 1000);
+    });
+}
+
+async function squareRoot(number) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(Math.sqrt(number));
+        }, 1000);
+    });
+}
+
+async function calculateTriangleArea() {
+    const sideA = await gatherInput("Enter length of side A");
+    const sideB = await gatherInput("Enter length of side B");
+    const sideC = await gatherInput("Enter length of side C");
+
+    const s = (sideA + sideB + sideC) / 2;
+    const squareS = await square(s);
+    const areaSquare = squareS * (s - sideA) * (s - sideB) * (s - sideC);
+    const area = await squareRoot(areaSquare);
+
+    return area;
+}
+
+calculateTriangleArea().then(result => {
+    $(document).ready(function() {
+        $("#result").html(`The area of the triangle is approximately: ${result.toFixed(3)}`);
+    });
+}).catch(error => {
+    console.error("An error occurred:", error);
+});
+    
+</script>
+
+<div id="result"></div>
+
+</body>
+</html>
